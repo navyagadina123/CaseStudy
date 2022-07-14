@@ -1,8 +1,8 @@
-package com.cg.plantapp.controller;
+package com.plantapp.authentication.controllers;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,74 +12,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.plantapp.entity.Planter;
-import com.cg.plantapp.exception.NoProperDataException;
-import com.cg.plantapp.exception.PlanterNotFoundException;
-import com.cg.plantapp.service.PlanterServiceImpl;
-import com.cg.plantapp.service.SequenceGeneratorService;
+import com.plantapp.authentication.exception.NoProperDataException;
+import com.plantapp.authentication.exception.PlanterNotFoundException;
+import com.plantapp.authentication.models.Planter;
+import com.plantapp.authentication.services.SequenceGeneratorService;
+import com.plantapp.authentication.util.FeignClientUtilPlanter;
 
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
-@Slf4j
 @RequestMapping("/planter")
-public class PlanterController {
-
+public class FeignControllerPlanter  {
+	
 	@Autowired
-	private PlanterServiceImpl planterServiceimpl;
-
+	private FeignClientUtilPlanter feignplanter;
+	
+	
 	@Autowired
 	private SequenceGeneratorService service;
-
 	
 	@GetMapping("/allplanters") 
 	public ResponseEntity<List<Planter>> getAllPlanters() throws PlanterNotFoundException
 	{
-		log.info("starting  of get mapping");
-		return new  ResponseEntity<>(planterServiceimpl.getAllPlanters(),HttpStatus.OK);
+		
+		return feignplanter.getAllPlanters();
 		
 	}
 	
 	@GetMapping("/planters/{id}")
 	public ResponseEntity<Planter> getPlanterById(@PathVariable  Integer id)
 	throws PlanterNotFoundException{
-		Planter planters= planterServiceimpl.getPlanterById(id);
-		  return ResponseEntity.ok().body(planters);
-
+		return feignplanter.getPlanterById(id);
 	}
 	
 	@PostMapping("/addplanters") 
 	public ResponseEntity<Planter> addPlanter(@RequestBody Planter planter)  throws NoProperDataException
 	{
-		log.info("start");
+		
 		planter.setPlanter_Id(service.getSequenceNumberForPlanter(Planter.SEQUENCE_NAME));
-		return new ResponseEntity<>(planterServiceimpl.addPlanter(planter),HttpStatus.CREATED);
+		return feignplanter.addPlanter(planter);
 	}
 
 
-	
 	@DeleteMapping(path="/planters/{id}")
 	public ResponseEntity<String> deletePlanter(@PathVariable int id) throws PlanterNotFoundException {
-		int count=1;
-		for(int i=1;i>=count;count++)
-		{
-			if(count==1)
-			{
-			try {
-				planterServiceimpl.deletePlanter(id);
-			} catch (PlanterNotFoundException e) {
-				log.error(e.getMessage());
-			}
-			}
-			else
-			{
-				log.info("id not found");
-			}
-		}
-			return ResponseEntity.ok(" deleted operation done ");
-	
-	}
+			return feignplanter.deletePlanter(id);
 	}
 
-
-
+}

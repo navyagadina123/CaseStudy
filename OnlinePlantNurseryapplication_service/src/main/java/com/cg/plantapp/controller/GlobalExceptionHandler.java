@@ -1,4 +1,4 @@
-package com.cg.plantapp;
+package com.cg.plantapp.controller;
 
 import java.util.Date;
 import org.springframework.http.HttpStatus;

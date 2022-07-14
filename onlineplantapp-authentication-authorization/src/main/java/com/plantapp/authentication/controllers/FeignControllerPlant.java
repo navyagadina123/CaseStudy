@@ -1,10 +1,9 @@
-package com.cg.plantapp.controller;
+package com.plantapp.authentication.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,79 +12,61 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cg.plantapp.entity.Plant;
-import com.cg.plantapp.exception.NoProperDataException;
-import com.cg.plantapp.exception.PlantNotFoundException;
-import com.cg.plantapp.service.PlantServiceImpl;
-import com.cg.plantapp.service.SequenceGeneratorService;
 
-import lombok.extern.slf4j.Slf4j;
+import com.plantapp.authentication.exception.NoProperDataException;
+import com.plantapp.authentication.exception.PlantNotFoundException;
+import com.plantapp.authentication.models.Plant;
+import com.plantapp.authentication.services.SequenceGeneratorService;
+import com.plantapp.authentication.util.FiegnClientUtilPlant;
 
 @RestController
-@Slf4j
 @RequestMapping("/plant")
-public class PlantController {
+public class FeignControllerPlant {
 
 	@Autowired
-	private PlantServiceImpl plantServiceimpl;
-
+	private FiegnClientUtilPlant feignplant;
+	
+	
 	@Autowired
 	private SequenceGeneratorService service;
-	
+
 	@GetMapping("/allplants") 
+	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
 	public ResponseEntity<List<Plant>> getAllPlants() throws PlantNotFoundException
 	{
-		log.info("starting  of get mapping");
-		return new  ResponseEntity<>(plantServiceimpl.getAllPlants(),HttpStatus.OK);
+		
+		return feignplant.getAllPlants();
 		
 	}
 	
 	@GetMapping("/plants/{id}")
+	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
 	public ResponseEntity<Plant> getPlantById(@PathVariable  Integer id)
 	throws PlantNotFoundException{
-		Plant plants= plantServiceimpl.getPlantById(id);
-		  return ResponseEntity.ok().body(plants);
-
-		
-	}	
+		return feignplant.getPlantById(id);
+	}
+	
 	@PostMapping("/addplants") 
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<Plant> addPlant(@RequestBody Plant plant)  throws NoProperDataException
 	{
-		log.info("start");
 		plant.setPlant_Id(service.getSequenceNumberForPlant(Plant.SEQUENCE_NAME));
-		return new ResponseEntity<>(plantServiceimpl.addPlant(plant),HttpStatus.CREATED);
+		
+		return feignplant.addPlant(plant);
+	}
+
+	@PutMapping("/updateplant/{id}")
+	@PreAuthorize( "hasRole('ADMIN')")
+	public ResponseEntity<Plant> updatePlant(@RequestBody Plant plant,@PathVariable Integer id) throws PlantNotFoundException
+	{
+	return feignplant.updatePlant(plant, id);
 	}
 	
-
-	@PutMapping("/updatePlant/{id}")
-	public Plant updatePlant(@RequestBody Plant plant,@PathVariable Integer id) throws PlantNotFoundException {
-		Plant plt = plantServiceimpl.updatePlant(plant, id);
-		return plt;
-	}
-
 	@DeleteMapping(path="/plants/{id}")
+	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<String> deletePlant(@PathVariable Integer id) throws PlantNotFoundException {
-		int count=1;
-		for(int i=1;i>=count;count++)
-		{
-			if(count==1)
-			{
-			try {
-				plantServiceimpl.deletePlant(id);
-			} catch (PlantNotFoundException e) {
-				log.error(e.getMessage());
-			}
-			}
-			else
-			{
-				log.info("id not found");
-			}
-		}
-			return ResponseEntity.ok(" deleted operation done ");
-	
-	}
+			return feignplant.deletePlant(id);
 }
 
 	
-	
-
+}

@@ -1,4 +1,4 @@
-package com.cg.plantapp.serviceimpl;
+package com.cg.plantapp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.cg.plantapp.dbsequence.DbSequencePlant;
-import com.cg.plantapp.dbsequence.DbSequencePlanter;
+import com.cg.plantapp.entity.DbSequencePlant;
+import com.cg.plantapp.entity.DbSequencePlanter;
 
 import java.util.Objects;
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;

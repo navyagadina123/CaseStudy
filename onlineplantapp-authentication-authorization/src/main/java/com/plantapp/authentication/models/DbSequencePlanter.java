@@ -1,4 +1,4 @@
-package com.cg.plantapp.dbsequence;
+package com.plantapp.authentication.models;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,11 +7,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Document(collection = "db_sequence")
+@Document(collection = "db_sequence_planter")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-	public class DbSequencePlant {
+	public class DbSequencePlanter {
 	    @Id
 	    private String  id;
 	    private int seq;

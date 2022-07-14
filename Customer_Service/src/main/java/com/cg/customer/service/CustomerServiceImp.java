@@ -3,11 +3,7 @@ package com.cg.customer.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.cg.customer.entity.Customer;
 import com.cg.customer.exception.CustomerNotFoundException;
 import com.cg.customer.exception.NoProperDataException;
@@ -25,14 +21,16 @@ public class CustomerServiceImp implements CustomerService {
 	
 	
 	@Override
-	public ResponseEntity<List<Customer>> getAllCustomers() throws CustomerNotFoundException {
+	public List<Customer> getAllCustomers()  {
 		log.info("get all customers from here");
-		return new  ResponseEntity<>(customerRepository.findAll(),HttpStatus.OK);
+		return customerRepository.findAll();
 	}
+	
+	
 
 	
 	@Override
-	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer) throws NoProperDataException {
+	public Customer addCustomer(Customer customer) throws NoProperDataException {
 		log.info("start");
 		if(customer!=null) 
 		{
@@ -43,34 +41,23 @@ public class CustomerServiceImp implements CustomerService {
 		{
 			throw new NoProperDataException("Please fill fields");
 		}
-		return ResponseEntity.ok(customer);
+		return customer;
 	}
 	
 
 	
 	@Override
-	public ResponseEntity<Customer> getCustomerById(int id) throws CustomerNotFoundException {
+	public Customer getCustomerById(int id) throws CustomerNotFoundException {
 		Customer customers=customerRepository.findById(id).orElseThrow(()-> new  CustomerNotFoundException("customer Not Found"+id));
-
-		return ResponseEntity.ok().body(customers);
+		return customers;
 	}
 
-	@Override
-	public ResponseEntity<Customer> updateCustomer(Customer customer, int id) throws CustomerNotFoundException {
-		Customer customers=customerRepository.findById(id).orElseThrow(()-> new CustomerNotFoundException("customer not "+id));
-		
-		customers.setUsername(customer.getUsername());
-		customers.setAddress(customer.getAddress());
-		customers.setEmail(customer.getEmail());
-		customers.setContact_No(customer.getContact_No());
-		
-		
-		final Customer updatedCustomer = customerRepository.save(customer);
-		return ResponseEntity.ok(updatedCustomer);
-	}
+	
+
+
 
 	@Override
-	public ResponseEntity<String> deleteCustomer(Integer id) throws CustomerNotFoundException {
+	public String deleteCustomer(Integer id) throws CustomerNotFoundException {
 		log.info("Start delete");
 		var isRemoved =customerRepository.findById(id);
 		if(isRemoved.isPresent())
@@ -83,7 +70,7 @@ public class CustomerServiceImp implements CustomerService {
 			throw new CustomerNotFoundException("Id Not Available");
 		}
 		log.info(" deleted End");
-		return ResponseEntity.ok(id+" deleted successfully");
+		return " deleted successfully";
 	}
 
 }
