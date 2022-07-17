@@ -11,19 +11,22 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: OnlinePlantNurseryapplication_service
+        - id: PlantNursery-Service
           uri: http://localhost:8081/
           predicates:
             - Path=/api/v1/**
        
-        - id: Customer_Service
+        - id: Customer-Service
           uri: http://localhost:8086/
           predicates:
             - Path=/api/v2/**
             
-        - id: Order_Service
+        - id: Order-Service
           uri: http://localhost:8084/
           predicates:
             - Path=/api/v3/**
         
-        
+        - id: Planter-Service
+          uri: http://localhost:8085/
+          predicates:
+            - Path=/planter/**

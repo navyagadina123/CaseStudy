@@ -2,15 +2,15 @@ package com.plantapp.authentication.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,14 +43,14 @@ public class FeignControllerCustomer {
 	
 	@GetMapping("/customers/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable  Integer id)
+	public ResponseEntity<Customer> getCustomerById(@Valid @PathVariable  Integer id)
 	throws CustomerNotFoundException{
 		return feigncustomer.getCustomerById(id);
 	}
 	
 	@PostMapping("/addCustomers") 
  @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer)  throws NoProperDataException
+	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer)  throws NoProperDataException
 	{
 		customer.setCust_id(service.getSequenceNumberForCustomer(Customer.SEQUENCE_NAME));
 		return feigncustomer.addCustomer(customer);
@@ -59,7 +59,7 @@ public class FeignControllerCustomer {
 
 	@DeleteMapping(path="/customers/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> deleteCustomer(@PathVariable int id) throws CustomerNotFoundException {
+	public ResponseEntity<String> deleteCustomer(@Valid @PathVariable int id) throws CustomerNotFoundException {
 			return feigncustomer.deleteCustomer(id);
 	}
 

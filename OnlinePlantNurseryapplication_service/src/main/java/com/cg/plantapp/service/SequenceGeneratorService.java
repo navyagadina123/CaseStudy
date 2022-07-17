@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import com.cg.plantapp.model.DbSequencePlant;
-import com.cg.plantapp.model.DbSequencePlanter;
+
 
 import java.util.Objects;
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;
@@ -38,35 +38,7 @@ public class SequenceGeneratorService {
     
    
     
-    public int getSequenceNumberForPlanter(String sequenceName) {
-        //get sequence no
-        Query query = new Query(Criteria.where("id").is(sequenceName));
-        //update the sequence no
-        Update update = new Update().inc("seq",2000);
-        //modify in document
-        //planter id will start from 100
-        DbSequencePlanter counter = mongoOperations
-                .findAndModify(query,
-                        update, options().returnNew(true).upsert(true),
-                        DbSequencePlanter.class);
-
-        return !Objects.isNull(counter) ? counter.getSeq() :1;
-    }
-    
-    
-    public int getSequenceNumberForCustomer(String sequenceName) {
-        //get sequence no
-        Query query = new Query(Criteria.where("id").is(sequenceName));
-        //update the sequence no
-        Update update = new Update().inc("seq",100);
-        //modify in document
-        //customer id will start from 200
-        DbSequencePlant counter = mongoOperations
-                .findAndModify(query,
-                        update, options().returnNew(true).upsert(true),
-                        DbSequencePlant.class);
-
-        return !Objects.isNull(counter) ? counter.getSeq() :1;
-    }
-    
+   
 }
+    
+   

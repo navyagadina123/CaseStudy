@@ -50,11 +50,11 @@ public class PlantController {
 		
 	}	
 	@PostMapping("/addplants") 
-	public ResponseEntity<Plant> addPlant(@RequestBody Plant plnts)  throws NoProperDataException
+	public ResponseEntity<Plant> addPlant(@RequestBody Plant plants)  throws NoProperDataException
 	{
 		log.info("start");
-		plnts.setPlantId(service.getSequenceNumberForPlant(Plant.SEQUENCE_NAME));
-		return new ResponseEntity<>(plantServiceimpl.addPlant(plnts),HttpStatus.CREATED);
+		plants.setPlantId(service.getSequenceNumberForPlant(Plant.SEQUENCE_NAME));
+		return new ResponseEntity<>(plantServiceimpl.addPlant(plants),HttpStatus.CREATED);
 	}
 	
 

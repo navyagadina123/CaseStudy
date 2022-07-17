@@ -22,17 +22,17 @@ public class PlantServiceImpl implements PlantService{
 	
 	@Override
 	public List<Plant> getAllPlants() throws PlantNotFoundException {
-		List<Plant> plts =new ArrayList<>();
-		plts =plantRepository.findAll();
+		List<Plant> plants =new ArrayList<>();
+		plants =plantRepository.findAll();
 		try {
-		if(plts.size()==0){
+		if(plants.size()==0){
 			throw new PlantNotFoundException("Plant is empty");
 		}
 		}catch(PlantNotFoundException e)
 		{
 			log.error(e.getMessage());
 		}
-	return plts;
+	return plants;
 	}
 	
 	@Override

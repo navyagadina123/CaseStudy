@@ -42,7 +42,7 @@ public class CustomerControllerTests {
     	List<Customer> cust= new ArrayList<>();
     	cust.add(new Customer(1,"Navya","navya@gmail.com","776890654","bellary"));
     	cust.add(new Customer(2,"bhavya","bavya@gmail.com","776854098","sindhanur"));
-    	Mockito.when(customerRepository.find);
+    	Mockito.when(customerServiceimpl.getAllCustomers());
     	
     	String url ="api/v2/allcustomers";
   MvcResult mvcResult=  mockMvc.perform(get(url)).andExpect(status().isOk()).andReturn();

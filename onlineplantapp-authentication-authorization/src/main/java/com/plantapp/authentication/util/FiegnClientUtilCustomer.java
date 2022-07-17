@@ -4,11 +4,9 @@ import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-//import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-//import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import com.plantapp.authentication.models.Customer;
 
@@ -26,7 +24,7 @@ public interface FiegnClientUtilCustomer {
 	
 	
 	@PostMapping("/addCustomers") 
-	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer);
+	public ResponseEntity<Customer> addCustomer(Customer customer);
 
 	
 	

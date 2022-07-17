@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.plantapp.authentication.models.Planter;
 
 
-@FeignClient(value="PlantNursery-Service",url="http://localhost:8081/planter")
+@FeignClient(value="Planter-Service",url="http://localhost:8085/planter")
 public interface FeignClientUtilPlanter {
 	
 	@GetMapping("/allplanters") 
