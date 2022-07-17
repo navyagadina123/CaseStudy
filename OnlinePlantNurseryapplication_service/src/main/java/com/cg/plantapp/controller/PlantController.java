@@ -13,9 +13,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cg.plantapp.entity.Plant;
+
 import com.cg.plantapp.exception.NoProperDataException;
 import com.cg.plantapp.exception.PlantNotFoundException;
+import com.cg.plantapp.model.Plant;
 import com.cg.plantapp.service.PlantServiceImpl;
 import com.cg.plantapp.service.SequenceGeneratorService;
 
@@ -49,17 +50,17 @@ public class PlantController {
 		
 	}	
 	@PostMapping("/addplants") 
-	public ResponseEntity<Plant> addPlant(@RequestBody Plant plant)  throws NoProperDataException
+	public ResponseEntity<Plant> addPlant(@RequestBody Plant plnts)  throws NoProperDataException
 	{
 		log.info("start");
-		plant.setPlant_Id(service.getSequenceNumberForPlant(Plant.SEQUENCE_NAME));
-		return new ResponseEntity<>(plantServiceimpl.addPlant(plant),HttpStatus.CREATED);
+		plnts.setPlantId(service.getSequenceNumberForPlant(Plant.SEQUENCE_NAME));
+		return new ResponseEntity<>(plantServiceimpl.addPlant(plnts),HttpStatus.CREATED);
 	}
 	
 
 	@PutMapping("/updatePlant/{id}")
-	public Plant updatePlant(@RequestBody Plant plant,@PathVariable Integer id) throws PlantNotFoundException {
-		Plant plt = plantServiceimpl.updatePlant(plant, id);
+	public Plant updatePlant(@RequestBody Plant plnts,@PathVariable Integer id) throws PlantNotFoundException {
+		Plant plt = plantServiceimpl.updatePlant(plnts, id);
 		return plt;
 	}
 

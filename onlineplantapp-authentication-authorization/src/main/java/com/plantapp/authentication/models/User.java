@@ -16,17 +16,17 @@ public class User {
   @Id
   private String id;
 
-  @NotBlank
+  @NotBlank(message="username is required")
   @Size(max = 20)
   private String username;
 
-  @NotBlank
+  @NotBlank(message="email is required")
   @Size(max = 50)
-  @Email
+  @Email(message="invalid email")
   private String email;
 
-  @NotBlank
-  @Size(max = 120)
+  @NotBlank(message="password is required")
+  @Size(max = 20)
   private String password;
 
   @DBRef

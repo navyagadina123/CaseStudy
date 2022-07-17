@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
-import com.cg.plantapp.entity.DbSequencePlant;
-import com.cg.plantapp.entity.DbSequencePlanter;
+import com.cg.plantapp.model.DbSequencePlant;
+import com.cg.plantapp.model.DbSequencePlanter;
 
 import java.util.Objects;
 import static org.springframework.data.mongodb.core.FindAndModifyOptions.options;

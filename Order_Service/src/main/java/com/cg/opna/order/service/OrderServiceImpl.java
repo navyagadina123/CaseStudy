@@ -41,7 +41,7 @@ public Order addOrders(Order order) throws NoProperDataException {
 	if(order!=null) 
 	{
 		orderRepository.save(order);
-		System.out.println("orders added");
+		log.debug("orders added");
 	}
 	else
 	{

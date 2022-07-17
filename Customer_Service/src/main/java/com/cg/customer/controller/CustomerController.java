@@ -2,6 +2,8 @@ package com.cg.customer.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,36 +34,74 @@ public class CustomerController {
 
 	@Autowired
 	private SequenceGeneratorService service;
-	
+		
 
 	
 	@GetMapping("/allcustomers") 
 	public ResponseEntity<List<Customer>> getAllCustomer() throws CustomerNotFoundException
 	{
+		
+		List<Customer> customers=customerServiceimpl.getAllCustomers();
 		log.info("starting  of get mapping");
-		 return new  ResponseEntity<>(customerServiceimpl.getAllCustomers(),HttpStatus.OK); 		
+	
+		if(customers.size()>0) {
+			log.debug("customers are {}"
+					+ customers);
+		 return new  ResponseEntity<>(customers,HttpStatus.OK); 
+		}
+		else {
+			log.debug(" no customers found ");
+			 return new  ResponseEntity<>(customers,HttpStatus.NO_CONTENT); 
+		}
 	}
 	
+	
+	
+
 	@GetMapping("/customers/{id}")
-	public ResponseEntity<Customer> getCustomerById(@PathVariable  int id)
-	throws CustomerNotFoundException{
-	
-		Customer customers=customerServiceimpl.getCustomerById(id);
-	    return ResponseEntity.ok().body(customers);
-	}
-	
-	
+	public ResponseEntity<Customer> getCustomerById(@Valid @PathVariable  int id)
+	throws CustomerNotFoundException	
+		
+		{
+			log.info("starting  of get mapping");
+			Customer customers=customerServiceimpl.getCustomerById(id);
+		
+			if(customers.getCust_id()!=0) {
+				log.debug("customers are {}"
+						+ customers);
+			 return new  ResponseEntity<>(customers,HttpStatus.OK); 
+			}
+			else {
+				log.debug(" no customers found ");
+				 return new  ResponseEntity<>(customers,HttpStatus.NOT_FOUND); 
+			}
+		}
+		
 	
 	@PostMapping("/addCustomers") 
-	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer)  throws NoProperDataException
+	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer)  throws NoProperDataException
 	{
-		log.info("start");
-		customer.setCust_id(service.getSequenceNumberForCustomer(Customer.SEQUENCE_NAME));
-		return new ResponseEntity<>(customerServiceimpl.addCustomer(customer),HttpStatus.CREATED);
+		if(customer!=null) 
+		{
+			
+			customer.setCust_id(service.getSequenceNumberForCustomer(Customer.SEQUENCE_NAME));
+			customerServiceimpl.addCustomer(customer);
+			log.error("added customer");
+			return new ResponseEntity<>(customer,HttpStatus.CREATED);
+			
+		}
+		else
+		{
+			throw new NoProperDataException("Please fill fields");
+		}
+		
+		
 	}
 
+	
+
 	@DeleteMapping(path="/customers/{id}")
-	public ResponseEntity<String> deleteCustomer(@PathVariable int id) throws CustomerNotFoundException {
+	public ResponseEntity<String> deleteCustomer(@Valid @PathVariable int id) throws CustomerNotFoundException {
 		int count=1;
 		for(int i=1;i>=count;count++)
 		{

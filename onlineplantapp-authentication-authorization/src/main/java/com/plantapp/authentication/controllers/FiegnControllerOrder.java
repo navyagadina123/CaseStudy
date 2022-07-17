@@ -50,7 +50,7 @@ public class FiegnControllerOrder {
 
 
 	@DeleteMapping(path="/orders/{id}")
-	@PreAuthorize("hasRole('USER') ")
+	@PreAuthorize("hasRole('ADMIN') ")
 	public ResponseEntity<String> deleteOrder(@PathVariable int id) throws OrderNotFoundException {
 			return feignclientutilorder.deleteOrder(id);
 	}

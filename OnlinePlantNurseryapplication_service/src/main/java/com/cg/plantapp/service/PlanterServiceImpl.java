@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-import com.cg.plantapp.entity.Planter;
 import com.cg.plantapp.exception.NoProperDataException;
 import com.cg.plantapp.exception.PlanterNotFoundException;
+import com.cg.plantapp.model.Planter;
 import com.cg.plantapp.repository.PlanterRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class PlanterServiceImpl implements PlanterService {
 		if(planter!=null) 
 		{
 			planterRepository.save(planter);
-			System.out.println("planter added");
+			log.debug("added plant");
 		}
 		else
 		{

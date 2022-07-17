@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cg.plantapp.entity.Planter;
 import com.cg.plantapp.exception.NoProperDataException;
 import com.cg.plantapp.exception.PlanterNotFoundException;
+import com.cg.plantapp.model.Planter;
 import com.cg.plantapp.service.PlanterServiceImpl;
 import com.cg.plantapp.service.SequenceGeneratorService;
 
@@ -49,11 +49,11 @@ public class PlanterController {
 	}
 	
 	@PostMapping("/addplanters") 
-	public ResponseEntity<Planter> addPlanter(@RequestBody Planter planter)  throws NoProperDataException
+	public ResponseEntity<Planter> addPlanter(@RequestBody Planter pltr)  throws NoProperDataException
 	{
 		log.info("start");
-		planter.setPlanter_Id(service.getSequenceNumberForPlanter(Planter.SEQUENCE_NAME));
-		return new ResponseEntity<>(planterServiceimpl.addPlanter(planter),HttpStatus.CREATED);
+		pltr.setPlanterId(service.getSequenceNumberForPlanter(Planter.SEQUENCE_NAME));
+		return new ResponseEntity<>(planterServiceimpl.addPlanter(pltr),HttpStatus.CREATED);
 	}
 
 

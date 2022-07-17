@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.cg.plantapp.entity.Plant;
 import com.cg.plantapp.exception.NoProperDataException;
 import com.cg.plantapp.exception.PlantNotFoundException;
+import com.cg.plantapp.model.Plant;
 import com.cg.plantapp.repository.PlantRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,17 +22,17 @@ public class PlantServiceImpl implements PlantService{
 	
 	@Override
 	public List<Plant> getAllPlants() throws PlantNotFoundException {
-		List<Plant> plants =new ArrayList<>();
-		plants =plantRepository.findAll();
+		List<Plant> plts =new ArrayList<>();
+		plts =plantRepository.findAll();
 		try {
-		if(plants.size()==0){
+		if(plts.size()==0){
 			throw new PlantNotFoundException("Plant is empty");
 		}
 		}catch(PlantNotFoundException e)
 		{
 			log.error(e.getMessage());
 		}
-	return plants;
+	return plts;
 	}
 	
 	@Override
@@ -41,7 +41,7 @@ public class PlantServiceImpl implements PlantService{
 		if(plant!=null) 
 		{
 			plantRepository.save(plant);
-			System.out.println("plant added");
+			log.debug("plant added");
 		}
 		else
 		{
@@ -63,7 +63,7 @@ public class PlantServiceImpl implements PlantService{
 	@Override
 	public Plant updatePlant(Plant plant,Integer id) throws PlantNotFoundException {
 		Plant plants=plantRepository.findById(id).orElseThrow(()-> new PlantNotFoundException("plant not "+id));
-    	plants.setPlant_Id(plants.getPlant_Id());
+    	plants.setPlantId(plants.getPlantId());
 		plants.setCommonName(plants.getCommonName());
      	plants.setPlantDescription(plants.getPlantDescription());
 		plants.setTypeOfPlant(plants.getTypeOfPlant());

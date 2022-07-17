@@ -48,10 +48,10 @@ public ResponseEntity<Order> getOrderById(@PathVariable  int id) throws OrderNot
 }
 	
 	@PostMapping("/addOrders") 
-	public ResponseEntity<Order> addOrders(@RequestBody Order order) throws NoProperDataException {
+	public ResponseEntity<Order> addOrders(@RequestBody Order odto) throws NoProperDataException {
 		log.info("start");
-		order.setBookingOrderId(service.getSequenceNumberForOrders(Order.SEQUENCE_NAME));
-		return new ResponseEntity<>(orderServiceimpl.addOrders(order),HttpStatus.CREATED);
+		odto.setBookingOrderId(service.getSequenceNumberForOrders(Order.SEQUENCE_NAME));
+		return new ResponseEntity<>(orderServiceimpl.addOrders(odto),HttpStatus.CREATED);
 	}
 
 	

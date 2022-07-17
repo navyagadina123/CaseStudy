@@ -14,7 +14,7 @@ import com.cg.plantapp.exception.PlantNotFoundException;
 public class GlobalExceptionHandler {
     
 	@ExceptionHandler(PlantNotFoundException.class)
-	public ResponseEntity<?> resourseNotFoundException
+	public ResponseEntity<ErrorDetails> resourseNotFoundException
 	(PlantNotFoundException ex, WebRequest request){
 		ErrorDetails errorDetails=new ErrorDetails
 				(new Date(), ex.getMessage(), request.getDescription(false));
@@ -22,8 +22,7 @@ public class GlobalExceptionHandler {
 	}
 	
 	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> GlobalExceptionHandler
-	(Exception ex, WebRequest request){
+	public ResponseEntity<ErrorDetails> GlobalExceptionHandler(Exception ex, WebRequest request){
 		ErrorDetails errorDetails=new ErrorDetails
 				(new Date(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);

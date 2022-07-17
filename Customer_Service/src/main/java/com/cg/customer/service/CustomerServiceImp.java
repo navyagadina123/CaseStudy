@@ -22,8 +22,9 @@ public class CustomerServiceImp implements CustomerService {
 	
 	@Override
 	public List<Customer> getAllCustomers()  {
-		log.info("get all customers from here");
+		log.info("get all customers");
 		return customerRepository.findAll();
+		
 	}
 	
 	
@@ -31,11 +32,12 @@ public class CustomerServiceImp implements CustomerService {
 	
 	@Override
 	public Customer addCustomer(Customer customer) throws NoProperDataException {
-		log.info("start");
+		
 		if(customer!=null) 
 		{
 			customerRepository.save(customer);
-			System.out.println("customer added");
+			log.debug("customer added {}",customer);
+			
 		}
 		else
 		{
@@ -49,6 +51,7 @@ public class CustomerServiceImp implements CustomerService {
 	@Override
 	public Customer getCustomerById(int id) throws CustomerNotFoundException {
 		Customer customers=customerRepository.findById(id).orElseThrow(()-> new  CustomerNotFoundException("customer Not Found"+id));
+		log.debug("customers getbyid {}",customers);
 		return customers;
 	}
 

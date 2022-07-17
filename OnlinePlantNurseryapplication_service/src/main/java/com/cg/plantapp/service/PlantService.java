@@ -1,9 +1,10 @@
 package com.cg.plantapp.service;
 
 import java.util.List;
-import com.cg.plantapp.entity.Plant;
+
 import com.cg.plantapp.exception.NoProperDataException;
 import com.cg.plantapp.exception.PlantNotFoundException;
+import com.cg.plantapp.model.Plant;
 
 public interface PlantService {
 

@@ -1,4 +1,4 @@
-package com.cg.plantapp.entity;
+package com.cg.plantapp.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

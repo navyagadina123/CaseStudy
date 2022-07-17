@@ -1,4 +1,4 @@
-package com.cg.plantapp.entity;
+package com.cg.plantapp.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,7 +14,7 @@ public class Plant {
 		
 		public static final String SEQUENCE_NAME = "plant_sequence";
 		@Id
-	private	Integer plant_Id;
+	private	Integer plantId;
 	private	String commonName;
 	private String typeOfPlant;
 	private String plantDescription;
