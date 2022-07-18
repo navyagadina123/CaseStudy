@@ -3,17 +3,17 @@ package com.cg.opna.planter.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.AfterEach;
-//import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PlanterTest {
 	
 
 		Planter p1;
-//		@BeforeEach
-//		public void before() {
-//			Planter p1 = new Planter(2000,9, "red","oval",10, 90);
-//		}
+		@BeforeEach
+		public void before() {
+			Planter p1 = new Planter(2000,9, "red","oval",10, 90);
+		}
 		
 		
 		@AfterEach

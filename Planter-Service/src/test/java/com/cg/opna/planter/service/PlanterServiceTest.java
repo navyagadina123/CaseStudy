@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.cg.opna.planter.exception.NoProperDataException;
 //import com.cg.opna.planter.exception.NoProperDataException;
 import com.cg.opna.planter.exception.PlanterNotFoundException;
 import com.cg.opna.planter.model.Planter;
@@ -61,56 +62,67 @@ public class PlanterServiceTest {
 	@Test
 	void testGetPlanterByInvalidId() throws PlanterNotFoundException {
 		Planter p1= new Planter(2000,9, "red","oval",10, 90);
-		when(planterRepository.findById(101)).thenReturn(Optional.of(p1));
+		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
 		try {
-			assertThat(planterServiceImpl.getPlanterById(1)).as("Planter with the id 1 doesn't exist");
+			assertThat(planterServiceImpl.getPlanterById(2001)).as("Planter with the id 2001 doesn't exist");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
-//	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
-//	@Test
-//	void testAddPlanter() throws PlanterNotFoundException, NoProperDataException {
-//		Planter p1= new Planter(2000,9, "red","oval",10, 90);
-//		((List<Planter>) assertThat(planterServiceImpl.addPlanter(p1)))
-//		.contains("added successfully....");
+	@Test
+	void testAddPlanterException() throws PlanterNotFoundException {
+		
+		Planter p1= null;//new Planter(2000,9, "red","oval",10, 90);
+//		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
+	try {
+		planterServiceImpl.addPlanter(p1);
+	}catch(Exception e) {
+		assertEquals("Please fill fields", e.getMessage());
+	}
+	}
+	@Test
+	void testAddPlanter() throws PlanterNotFoundException, NoProperDataException {
+		Planter p1= new Planter(2000,9, "red","oval",10, 90);
+		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
+		((List<Planter>) assertThat(planterServiceImpl.addPlanter(p1)))
+		.contains("added successfully....");
+	
+	}	
+	
+	@Test
+	void testAddPlanterAlreadyExists() throws PlanterNotFoundException {
+		Planter p1= new Planter(2000,9, "red","oval",10, 90);
+		when(planterRepository.findById(101)).thenReturn(Optional.of(p1));
+	try {
+		((List<Planter>) assertThat(planterServiceImpl.addPlanter(p1)))
+		.contains("Planter with the id "+p1.getPlanterId()+" already exist");
+	}catch(Exception e) {
+		
+	}
+	}
 //	
-//	}	
-//	@SuppressWarnings({ "unchecked", "unlikely-arg-type" })
-//	@Test
-//	void testAddPlanterAlreadyExists() throws PlanterNotFoundException {
-//		Planter p1= new Planter(2000,9, "red","oval",10, 90);
-//		when(planterRepository.findById(101)).thenReturn(Optional.of(p1));
-//	try {
-//		((List<Planter>) assertThat(planterServiceImpl.addPlanter(p1)))
-//		.contains("Product with the id "+p1.getPlanterId()+" already exist");
-//	}catch(Exception e) {
-//		
-//	}
-//	}
-//	
-//	@Test
-//	void testupdatePlanter() throws PlanterNotFoundException {
-//		Planter p1= new Planter(2000,9, "red","oval",10, 90);	
-//		when(planterRepository.findById(101)).thenReturn(Optional.of(p1));
-//		assertThat(planterServiceImpl.updatePlanter(p1))
-//		.contains("updated successfully....");
-//	
-//	}
-//	
-//	@Test
-//	void testupdatePlanterDoesnotExists() throws PlanterNotFoundException {
-//		Planter p1= new Planter(2000,9, "red","oval",10, 90);	
-//		when(planterRepository.findById(10)).thenReturn(Optional.of(p1));
-//	try {
-//		assertThat(planterServiceImpl.updatePlanter(p1))
-//		.contains("Planter with the id "+p1.getPlanterId()+" doesn't exist for update");
-//	}catch(Exception e) {
-//		
-//	}
-//	}
+	@Test
+	void testupdatePlanter() throws PlanterNotFoundException {
+		Planter p1= new Planter(2000,9, "red","oval",10, 90);	
+		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
+		assertThat(planterServiceImpl.updatePlanter(p1))
+		.contains("updated successfully....");
+	
+	}
+	
+	@Test
+	void testupdatePlanterDoesnotExists() throws PlanterNotFoundException {
+		Planter p1= new Planter(2000,9, "red","oval",10, 90);	
+		when(planterRepository.findById(10)).thenReturn(Optional.of(p1));
+	try {
+		assertThat(planterServiceImpl.updatePlanter(p1))
+		.contains("Planter with the id "+p1.getPlanterId()+" doesn't exist for update");
+	}catch(Exception e) {
+		
+	}
+	}
 	
 	@Test
 	void testDeletePlanterById() throws PlanterNotFoundException {
@@ -126,7 +138,7 @@ public class PlanterServiceTest {
 		Planter p1= new Planter(2000,9, "red","oval",10, 90);	
 		when(planterRepository.findById(101)).thenReturn(Optional.of(p1));
 		try {
-			assertThat(planterServiceImpl.deletePlanter(111))
+			assertThat(planterServiceImpl.deletePlanter(2000))
 			.contains("Planter with the id "+p1.getPlanterId()+" doesn't exist");
 		}catch(Exception e) {
 			

@@ -22,10 +22,10 @@ public class PlanterServiceImpl implements PlanterService {
 
 	@Override
 	public List<Planter> getAllPlanters() throws PlanterNotFoundException {
-		log.info("start");
+		
 		List<Planter> planters= planterRepository.findAll();
 		log.debug("Planters are :{}",planters);
-		log.info("end");
+		
 		return planters;
 		
 	}
@@ -35,7 +35,7 @@ public class PlanterServiceImpl implements PlanterService {
 		
 		log.info("start");
 		return planterRepository.findById(id)
-				.orElseThrow(()-> new PlanterNotFoundException("Planter with the id "+id+" doesn't exist"));
+				.orElseThrow(()->  new PlanterNotFoundException("Planter with the id "+id+" doesn't exist"));
 	}
 
 	@Override
@@ -72,11 +72,13 @@ public class PlanterServiceImpl implements PlanterService {
 
 	@Override
 	public String updatePlanter(Planter p) throws PlanterNotFoundException {
-		log.info("start");
+		
 		Optional<Planter> planters=planterRepository.findById(p.getPlanterId());
 		Planter pltr=null;
 		if(!planters.isPresent()) {
+			log.debug("planter not found");
 			throw new PlanterNotFoundException("Planter with the id "+p.getPlanterId()+" doesn't exist for update");
+			
 		}else {
 			pltr=planters.get();
 			pltr.setPlanterId(p.getPlanterId());
@@ -88,7 +90,7 @@ public class PlanterServiceImpl implements PlanterService {
 			planterRepository.save(pltr);
 			log.debug("updated successfully {}",pltr);
 		}
-		log.info("End");
+		
 		return pltr+ "\n updated successfully....";
 	}
 

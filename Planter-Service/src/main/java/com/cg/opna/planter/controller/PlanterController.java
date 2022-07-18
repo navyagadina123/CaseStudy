@@ -2,6 +2,8 @@ package com.cg.opna.planter.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,15 +54,21 @@ public class PlanterController {
 	}
 	
 	@GetMapping("/planters/{id}")
-	public ResponseEntity<Planter> getPlanterById(@PathVariable  Integer id)
+	public ResponseEntity<Planter> getPlanterById(@Valid @PathVariable  Integer id)
 	throws PlanterNotFoundException{
+		
 		Planter planters= planterServiceimpl.getPlanterById(id);
+		if(planters!=null){
 		  return ResponseEntity.ok().body(planters);
+		}
+		  else {
+			return new   ResponseEntity(planters,HttpStatus.NOT_FOUND);
+		  }
 
 	}
 	
 	@PostMapping("/addplanters") 
-	public ResponseEntity<Planter> addPlanter(@RequestBody Planter pdto)  throws NoProperDataException
+	public ResponseEntity<Planter> addPlanter(@Valid @RequestBody Planter pdto)  throws NoProperDataException
 	{
 		
 		if(pdto!=null) 
@@ -83,7 +91,7 @@ public class PlanterController {
 
 	
 	@DeleteMapping(path="/planters/{id}")
-	public ResponseEntity<String> deletePlanter(@PathVariable int id) throws PlanterNotFoundException {
+	public ResponseEntity<String> deletePlanter(@Valid @PathVariable int id) throws PlanterNotFoundException {
 		int count=1;
 		for(int i=1;i>=count;count++)
 		{
@@ -98,7 +106,7 @@ public class PlanterController {
 			}
 			else
 			{
-				//throw new PlanterNotFoundException("Planter with the id "+id+" doesn't exist");
+				
 				log.info("id not found");
 			}
 			
@@ -112,7 +120,8 @@ public class PlanterController {
 
 
 @PutMapping("/updateplanter")
-public String updatePlanter(@RequestBody Planter planter) throws PlanterNotFoundException{
+public String updatePlanter(@Valid @RequestBody Planter planter) throws PlanterNotFoundException{
+	
 	String pltr=planterServiceimpl.updatePlanter(planter);
 	return pltr;
 }
