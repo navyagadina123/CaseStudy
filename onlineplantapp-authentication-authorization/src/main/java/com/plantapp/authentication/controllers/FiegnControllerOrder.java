@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 //import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,10 +31,10 @@ public class FiegnControllerOrder {
 	
 	@GetMapping("/allorders") 
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<List<Order>> getAllOrders() throws OrderNotFoundException {
+	public ResponseEntity<List<Order>> getAllOrders(@RequestHeader("Authorization") String token) throws OrderNotFoundException {
 	{
 		
-		return feignclientutilorder.getAllOrders();
+		return feignclientutilorder.getAllOrders(token);
 		
 	}
 	
@@ -51,8 +52,8 @@ public class FiegnControllerOrder {
 
 	@DeleteMapping(path="/orders/{id}")
 	@PreAuthorize("hasRole('ADMIN') ")
-	public ResponseEntity<String> deleteOrder(@PathVariable int id) throws OrderNotFoundException {
-			return feignclientutilorder.deleteOrder(id);
+	public ResponseEntity<String> deleteOrder(@RequestHeader("Authorization") String token,@PathVariable int id) throws OrderNotFoundException {
+			return feignclientutilorder.deleteOrder(token,id);
 	}
 
 }

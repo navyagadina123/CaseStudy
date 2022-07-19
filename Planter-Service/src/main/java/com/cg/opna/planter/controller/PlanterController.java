@@ -7,6 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -54,7 +56,7 @@ public class PlanterController {
 	}
 	
 	@GetMapping("/planters/{id}")
-	public ResponseEntity<Planter> getPlanterById(@Valid @PathVariable  Integer id)
+	public ResponseEntity<Planter> getPlanterById(@PathVariable  Integer id)
 	throws PlanterNotFoundException{
 		
 		Planter planters= planterServiceimpl.getPlanterById(id);
@@ -68,10 +70,17 @@ public class PlanterController {
 	}
 	
 	@PostMapping("/addplanters") 
-	public ResponseEntity<Planter> addPlanter(@Valid @RequestBody Planter pdto)  throws NoProperDataException
+	public ResponseEntity<Planter> addPlanter(@Valid @RequestBody Planter pdto,BindingResult br)  throws MethodArgumentNotValidException, NoProperDataException
 	{
+		 if(br.hasErrors() || pdto==null) {
 		
-		if(pdto!=null) 
+			 //System.out.println("error***********");
+			 throw new MethodArgumentNotValidException(null,br);
+		 }
+		 
+			
+//	   	if(pdto!=null) 
+		 else
 		{
 			
 			pdto.setPlanterId(service.getSequenceNumberForPlanter(Planter.SEQUENCE_NAME));
@@ -80,18 +89,19 @@ public class PlanterController {
 			return new ResponseEntity<>(pdto,HttpStatus.CREATED);
 			
 		}
-		else
-		{
-			throw new NoProperDataException("Please fill fields");
-			
-		}
+//		else
+//		{
+//			throw new NoProperDataException("Please fill fields");
+//			
+//		}
+		
 		
 	}
 
 
 	
 	@DeleteMapping(path="/planters/{id}")
-	public ResponseEntity<String> deletePlanter(@Valid @PathVariable int id) throws PlanterNotFoundException {
+	public ResponseEntity<String> deletePlanter(@PathVariable int id) throws PlanterNotFoundException {
 		int count=1;
 		for(int i=1;i>=count;count++)
 		{

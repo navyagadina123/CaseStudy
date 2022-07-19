@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.plantapp.authentication.models.Customer;
 
@@ -15,12 +15,12 @@ import com.plantapp.authentication.models.Customer;
 public interface FiegnClientUtilCustomer {
 	
 	@GetMapping("/allcustomers") 
-	public ResponseEntity<List<Customer>> getAllCustomer();
+	public ResponseEntity<List<Customer>> getAllCustomer(@RequestHeader("Authorization") String token);
 	
 	
 	@GetMapping("/customers/{id}")
 	
-	public ResponseEntity<Customer> getCustomerById(int id);
+	public ResponseEntity<Customer> getCustomerById(@RequestHeader("Authorization") String token, int id);
 	
 	
 	@PostMapping("/addCustomers") 
@@ -29,7 +29,7 @@ public interface FiegnClientUtilCustomer {
 	
 	
 	@DeleteMapping(path="/customers/{id}")
-	public ResponseEntity<String> deleteCustomer(int id);
+	public ResponseEntity<String> deleteCustomer(@RequestHeader("Authorization") String token,int id);
 
 
 }

@@ -75,7 +75,7 @@ public class PlanterServiceTest {
 	void testAddPlanterException() throws PlanterNotFoundException {
 		
 		Planter p1= null;//new Planter(2000,9, "red","oval",10, 90);
-//		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
+		when(planterRepository.findById(2000)).thenReturn(Optional.of(p1));
 	try {
 		planterServiceImpl.addPlanter(p1);
 	}catch(Exception e) {

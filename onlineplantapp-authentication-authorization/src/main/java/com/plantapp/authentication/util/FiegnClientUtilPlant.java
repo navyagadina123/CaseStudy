@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.plantapp.authentication.models.Plant;
 
@@ -20,13 +20,11 @@ public  interface FiegnClientUtilPlant {
 	
 
 	@GetMapping("/allplants") 
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
-	public ResponseEntity<List<Plant>> getAllPlants();
+	public ResponseEntity<List<Plant>> getAllPlants(@RequestHeader("Authorization") String token);
 	
 	
 	@GetMapping("/plants/{id}")
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
-	public ResponseEntity<Plant> getPlantById(Integer id);
+	public ResponseEntity<Plant> getPlantById(@RequestHeader("Authorization") String token,Integer id);
 	
 	
 	@PostMapping("/addplants") 
@@ -37,8 +35,8 @@ public  interface FiegnClientUtilPlant {
 	public ResponseEntity<Plant> updatePlant(@RequestBody Plant plant,@PathVariable Integer id);
 	
 	@DeleteMapping(path="/plants/{id}")
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
-	public ResponseEntity<String> deletePlant(Integer id);
+	
+	public ResponseEntity<String> deletePlant(@RequestHeader("Authorization") String token,Integer id);
 
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,24 +34,24 @@ public class FeignControllerCustomer {
 	private SequenceGeneratorService service;
 
 	@GetMapping("/allcustomers") 
-	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
-	public ResponseEntity<List<Customer>> getAllCustomer() throws CustomerNotFoundException
+	@PreAuthorize(" hasRole('ADMIN')")
+	public ResponseEntity<List<Customer>> getAllCustomer(@RequestHeader("Authorization") String token) throws CustomerNotFoundException
 	{
 		
-		return feigncustomer.getAllCustomer();
+		return feigncustomer.getAllCustomer(token);
 		
 	}
 	
 	@GetMapping("/customers/{id}")
-	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Customer> getCustomerById(@Valid @PathVariable  Integer id)
+	@PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+	public ResponseEntity<Customer> getCustomerById(@Valid @RequestHeader("Authorization") String token,@PathVariable  Integer id)
 	throws CustomerNotFoundException{
-		return feigncustomer.getCustomerById(id);
+		return feigncustomer.getCustomerById(token,id);
 	}
 	
 	@PostMapping("/addCustomers") 
- @PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer)  throws NoProperDataException
+	@PreAuthorize("hasRole('USER')")
+	public ResponseEntity<Customer> addCustomer(@RequestBody Customer customer)  throws NoProperDataException
 	{
 		customer.setCust_id(service.getSequenceNumberForCustomer(Customer.SEQUENCE_NAME));
 		return feigncustomer.addCustomer(customer);
@@ -59,8 +60,8 @@ public class FeignControllerCustomer {
 
 	@DeleteMapping(path="/customers/{id}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<String> deleteCustomer(@Valid @PathVariable int id) throws CustomerNotFoundException {
-			return feigncustomer.deleteCustomer(id);
+	public ResponseEntity<String> deleteCustomer(@Valid @RequestHeader("Authorization") String token,@PathVariable int id) throws CustomerNotFoundException {
+			return feigncustomer.deleteCustomer(token,id);
 	}
 
 }

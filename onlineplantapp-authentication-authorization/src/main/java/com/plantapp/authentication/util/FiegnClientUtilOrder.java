@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.plantapp.authentication.models.Order;
 
@@ -16,7 +17,7 @@ import com.plantapp.authentication.models.Order;
 public interface FiegnClientUtilOrder {
 	
 	@GetMapping("/allorders") 
-	public ResponseEntity<List<Order>> getAllOrders();
+	public ResponseEntity<List<Order>> getAllOrders(@RequestHeader("Authorization") String token);
 	
 
 	@PostMapping("/addOrders") 
@@ -24,7 +25,7 @@ public interface FiegnClientUtilOrder {
 
 
 	@DeleteMapping(path="/orders/{id}")
-	public ResponseEntity<String> deleteOrder(@PathVariable int id);
+	public ResponseEntity<String> deleteOrder(@RequestHeader("Authorization") String token,@PathVariable int id);
 	
 
 }

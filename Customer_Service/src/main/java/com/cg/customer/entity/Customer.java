@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,6 +37,6 @@ public class Customer {
 	@Size(min=10)
 	private String contact_No;
 	
-	@NotBlank
+	@NotBlank(message="address is required")
 	private String address;
 }

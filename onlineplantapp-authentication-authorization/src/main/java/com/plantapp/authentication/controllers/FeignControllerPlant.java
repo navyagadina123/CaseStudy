@@ -1,6 +1,9 @@
 package com.plantapp.authentication.controllers;
 
 import java.util.List;
+
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,18 +36,18 @@ public class FeignControllerPlant {
 
 	@GetMapping("/allplants") 
 	@PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
-	public ResponseEntity<List<Plant>> getAllPlants() throws PlantNotFoundException
+	public ResponseEntity<List<Plant>> getAllPlants(@RequestHeader("Authorization") String token) throws PlantNotFoundException
 	{
 		
-		return feignplant.getAllPlants();
+		return feignplant.getAllPlants(token);
 		
 	}
 	
 	@GetMapping("/plants/{id}")
 	@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-	public ResponseEntity<Plant> getPlantById(@PathVariable  Integer id)
+	public ResponseEntity<Plant> getPlantById(@Valid@RequestHeader("Authorization") String token, @PathVariable  Integer id)
 	throws PlantNotFoundException{
-		return feignplant.getPlantById(id);
+		return feignplant.getPlantById(token,id);
 	}
 	
 	@PostMapping("/addplants") 
@@ -57,15 +61,15 @@ public class FeignControllerPlant {
 
 	@PutMapping("/updateplant/{id}")
 	@PreAuthorize( "hasRole('ADMIN')")
-	public ResponseEntity<Plant> updatePlant(@RequestBody Plant plant,@PathVariable Integer id) throws PlantNotFoundException
+	public ResponseEntity<Plant> updatePlant( @RequestBody Plant plant,@PathVariable Integer id) throws PlantNotFoundException
 	{
 	return feignplant.updatePlant(plant, id);
 	}
 	
 	@DeleteMapping(path="/plants/{id}")
 	@PreAuthorize("hasRole('USER')")
-	public ResponseEntity<String> deletePlant(@PathVariable Integer id) throws PlantNotFoundException {
-			return feignplant.deletePlant(id);
+	public ResponseEntity<String> deletePlant(@Valid @RequestHeader("Authorization") String token,@PathVariable Integer id) throws PlantNotFoundException {
+			return feignplant.deletePlant(token,id);
 }
 
 	

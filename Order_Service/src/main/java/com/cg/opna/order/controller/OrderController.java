@@ -32,27 +32,58 @@ public class OrderController {
 	@GetMapping("/allorders") 
 	public ResponseEntity<List<Order>> getAllOrders() throws OrderNotFoundException {
 	{
+		
+		List<Order> orders=orderServiceimpl.getAllOrders();
 		log.info("starting  of get mapping");
-		return new  ResponseEntity<>(orderServiceimpl.getAllOrders(),HttpStatus.OK);
+	
+		if(orders.isEmpty()) {
+			log.debug("orders are {}"
+					+ orders);
+		 return new  ResponseEntity<>(orders,HttpStatus.OK); 
+		}
+		else {
+			log.debug(" no orders found ");
+			 return new  ResponseEntity<>(orders,HttpStatus.NO_CONTENT); 
+		}
 		
 	}
+}
 	
-	}
+	
 	
 @GetMapping("orders/{id}")
 public ResponseEntity<Order> getOrderById(@PathVariable  int id) throws OrderNotFoundException {
-	
 	Order orders= orderServiceimpl.getOrderById(id);
+	if(orders!=null){
 	  return ResponseEntity.ok().body(orders);
-	
+	}
+	  else {
+		return new   ResponseEntity(orders,HttpStatus.NOT_FOUND);
+	  }
+
 }
+
 	
 	@PostMapping("/addOrders") 
 	public ResponseEntity<Order> addOrders(@RequestBody Order odto) throws NoProperDataException {
-		log.info("start");
-		odto.setBookingOrderId(service.getSequenceNumberForOrders(Order.SEQUENCE_NAME));
-		return new ResponseEntity<>(orderServiceimpl.addOrders(odto),HttpStatus.CREATED);
+
+		if(odto!=null) 
+		{
+			
+			odto.setBookingOrderId(service.getSequenceNumberForOrders(Order.SEQUENCE_NAME));
+			orderServiceimpl.addOrders(odto);
+			log.error("added oders");
+			return new ResponseEntity<>(odto,HttpStatus.CREATED);
+			
+		}
+		else
+		{
+			throw new NoProperDataException("Please fill fields");
+			
+		}
+		
 	}
+		
 
 	
 
